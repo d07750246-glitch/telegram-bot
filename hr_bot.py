@@ -1,6 +1,7 @@
 import logging
 import asyncio
 import html
+import os
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
@@ -9,7 +10,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 # --- НАЛАШТУВАННЯ БОТА ---
-BOT_TOKEN = "8962706217:AAGSCQ4f3Vg4BhBqW-ccY5SZb8unFu-i9F8" 
+BOT_TOKEN = os.getenv("BOT_TOKEN") 
 HR_CHAT_ID = -1003753845122  
 
 logging.basicConfig(level=logging.INFO)
