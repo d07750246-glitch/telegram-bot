@@ -179,5 +179,19 @@ async def process_phone(message: types.Message, state: FSMContext):
 async def main():
     await dp.start_polling(bot)
 
-if __name__ == "__main__":
-    asyncio.run(main())
+from aiohttp import web
+import os
+
+async def handle(request):
+    return web.Response(text="Bot is running")
+
+if __name__ == '__main__':
+    # Запускаем фоном вашего бота
+    loop = asyncio.get_event_loop()
+    loop.create_task(main())
+    
+    # Открываем порт для Render, чтобы он не ругался и не отключался
+    port = int(os.environ.get("PORT", 8000))
+    app = web.Application()
+    app.router.add_get('/', handle)
+    web.run_app(app, host='0.0.0.0', port=port)
