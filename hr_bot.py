@@ -182,16 +182,21 @@ async def main():
 from aiohttp import web
 import os
 
+async def on_startup(app):
+    # Запускаем бота фоном правильно при старте сервера
+    import asyncio
+    asyncio.create_task(main())
+
 async def handle(request):
     return web.Response(text="Bot is running")
 
 if __name__ == '__main__':
-    # Запускаем фоном вашего бота
-    loop = asyncio.get_event_loop()
-    loop.create_task(main())
-    
-    # Открываем порт для Render, чтобы он не ругался и не отключался
-    port = int(os.environ.get("PORT", 8000))
     app = web.Application()
     app.router.add_get('/', handle)
+    
+    # Привязываем запуск бота к старту веб-сервера
+    app.on_startup.append(on_startup)
+    
+    # Включаем порт для Render
+    port = int(os.environ.get("PORT", 8000))
     web.run_app(app, host='0.0.0.0', port=port)
